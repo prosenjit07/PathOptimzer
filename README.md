@@ -1,6 +1,6 @@
 <div align="center">
   <br />
-    <img src="https://i.postimg.cc/xnTr6TCb/PathOptimzer.png" alt="Project Banner">
+    <img src="./public/img/image.png" alt="Project Banner">
   <br />
   <br />
 
