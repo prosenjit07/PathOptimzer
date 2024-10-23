@@ -64,7 +64,7 @@ Make sure you have the following installed on your machine:
 ### Cloning the Repository
 
 ```bash
-git clone https://github.com/Mahmud0808/PathOptimzer.git
+git clone https://github.com/prosenjit07/PathOptimzer.git
 cd PathOptimzer
 ```
 
