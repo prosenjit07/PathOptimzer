@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@clerk/nextjs": "^5.2.3",
+    "@clerk/nextjs": "^5.7.2",
     "@clerk/themes": "^2.1.10",
     "@google/generative-ai": "^0.14.1",
     "@hookform/resolvers": "^3.9.0",
@@ -27,7 +27,7 @@
     "lucide-react": "^0.408.0",
     "mongodb": "^6.8.0",
     "mongoose": "^8.5.1",
-    "next": "14.2.5",
+    "next": "14.2.10",
     "next-nprogress-bar": "^2.3.12",
     "react": "^18",
     "react-dom": "^18",
