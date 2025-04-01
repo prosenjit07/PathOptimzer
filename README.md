@@ -1,6 +1,9 @@
 <div align="center">
   <br />
-    <img src="./public/img/image.png" alt="Project Banner">
+    <img src="./public/img/image.png" alt="Project Banner1">
+   <img src="./public/img/ai_resume.jpeg" alt="Project Banner2">
+     <img src="./public/img/ai2.jpeg" alt="Project Banner3">
+     <img src="./public/img/ai3.jpeg" alt="Project Banner4">
   <br />
   <br />
 
