@@ -18,7 +18,9 @@ export async function createResume({
   title: string;
 }) {
   try {
+    console.log("Attempting to connect to database...");
     await connectToDB();
+    console.log("Database connected, creating resume...");
 
     const newResume = await Resume.create({
       resumeId,
@@ -26,9 +28,27 @@ export async function createResume({
       title,
     });
 
+    console.log("Resume created successfully:", newResume.resumeId);
     return { success: true, data: JSON.stringify(newResume) };
   } catch (error: any) {
     console.error(`Failed to create resume: ${error.message}`);
+    console.error("Full error:", error);
+    
+    // Provide more specific error messages
+    if (error.message.includes("buffering time out")) {
+      return { 
+        success: false, 
+        error: "Database connection timeout. Please check your internet connection and try again." 
+      };
+    }
+    
+    if (error.message.includes("whitelist")) {
+      return { 
+        success: false, 
+        error: "Database access denied. Please check your MongoDB Atlas IP whitelist settings." 
+      };
+    }
+    
     return { success: false, error: error.message };
   }
 }
