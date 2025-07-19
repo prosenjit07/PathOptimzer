@@ -298,7 +298,7 @@ const EducationForm = ({ params }: { params: { id: string } }) => {
 
       {aiGeneratedDescriptionList.length > 0 && (
         <div className="my-5" ref={listRef}>
-          <h2 className="font-bold text-lg">Suggestions</h2>
+          <h2 className="font-bold text-lg">AI Suggestions</h2>
           {aiGeneratedDescriptionList?.map((item: any, index: number) => (
             <div
               key={index}
