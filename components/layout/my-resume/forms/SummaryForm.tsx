@@ -139,7 +139,7 @@ const SummaryForm = ({ params }: { params: { id: string } }) => {
 
       {aiGeneratedSummaryList.length > 0 && (
         <div className="my-5" ref={listRef}>
-          <h2 className="font-bold text-lg">Suggestions</h2>
+          <h2 className="font-bold text-lg">AI Suggestions</h2>
           {aiGeneratedSummaryList?.map((item: any, index: number) => (
             <div
               key={index}
