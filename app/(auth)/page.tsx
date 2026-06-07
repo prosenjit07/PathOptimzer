@@ -108,7 +108,7 @@ const page = () => {
       <footer className="backdrop-blur-md w-full">
         <div className="w-full mx-auto text-center max-w-screen-xl p-4 flex max-md:flex-col md:items-center md:justify-between">
           <span className="text-sm text-gray-500 sm:text-center">
-            © 2024{" "}
+            © 2026{" "}
             <span className="hover:text-primary-500 hover:cursor-pointer">
               PathOptimzer™
             </span>
