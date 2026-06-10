@@ -42,6 +42,9 @@ import { defaultSenderConfig } from "../app/(root)/services/emailTemplates";
 dotenv.config({ path: ".env.local" });
 dotenv.config();
 
+// Rate-limit delay between emails (ms) — configurable via env, default 1100ms
+const EMAIL_DELAY_MS = parseInt(process.env.EMAIL_DELAY_MS || "1100", 10);
+
 // ANSI color codes for better console output
 const colors = {
   reset: "\x1b[0m",
