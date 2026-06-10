@@ -21,18 +21,19 @@
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
-    --radius: 0.5rem;
-    --conic-gradient: conic-gradient(
-      #ff2e2e,
-      #ff831e,
-      #fcff51,
-      #48da48,
-      #575fff,
-      #ff57e5
-    );
-  }
+  --input: 214.3 31.8% 91.4%;
+  --ring: 221.2 83.2% 53.3%;
+  --radius: 0.5rem;
+  --conic-gradient: conic-gradient(
+    #ff2e2e,
+    #ff831e,
+    #fcff51,
+    #48da48,
+    #575fff,
+    #ff57e5
+  );
+  --grid-line: rgba(255, 255, 255, 0.05);
+}
 
   html {
     scroll-behavior: smooth;
@@ -213,4 +214,102 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* ===== Apple-style liquid water utilities (light theme) ===== */
+.liquid-glass {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.85) 0%,
+    rgba(255, 255, 255, 0.6) 60%,
+    rgba(255, 255, 255, 0.4) 100%
+  );
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 20px 60px -20px rgba(31, 64, 175, 0.18);
+}
+
+.liquid-bleed {
+  background:
+    radial-gradient(60% 60% at 20% 30%, rgba(125, 175, 255, 0.55), transparent 60%),
+    radial-gradient(50% 60% at 80% 20%, rgba(160, 230, 255, 0.55), transparent 60%),
+    radial-gradient(60% 70% at 50% 80%, rgba(220, 195, 255, 0.5), transparent 60%),
+    radial-gradient(40% 50% at 30% 90%, rgba(186, 230, 253, 0.55), transparent 60%);
+  filter: blur(60px) saturate(140%);
+}
+
+.liquid-text {
+  background: linear-gradient(
+    180deg,
+    #0b1730 0%,
+    #1e3a8a 60%,
+    #2563eb 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.liquid-iridescent {
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    #7c5cff,
+    #34f0c6,
+    #c6ff3d,
+    #ff5b2e,
+    #ff57e5,
+    #7c5cff
+  );
+}
+
+.grain {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.06  0 0 0 0 0.1  0 0 0 0 0.22  0 0 0 0.05 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  background-size: 180px 180px;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: 0.5;
+}
+
+.specular {
+  background: linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 255, 255, 0.7) 48%,
+    rgba(255, 255, 255, 0) 66%
+  );
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.text-pretty {
+  text-wrap: pretty;
+}
+
+/* Custom scrollbar — light */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #eef2ff;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #c7d2fe, #a5b4fc);
+  border-radius: 999px;
+  border: 2px solid #eef2ff;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #7c5cff, #38bdf8);
+}
+
+/* Selection */
+::selection {
+  background: #1e3a8a;
+  color: #f4f7ff;
 }
