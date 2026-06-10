@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { m, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { LiquidField } from "./LiquidField";
 import { ScanLine, FileText, Mail, Sparkles, ArrowUpRight } from "lucide-react";
@@ -23,7 +23,7 @@ export function HomeShowcaseSection() {
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
 
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-12">
-        <motion.div style={{ y: yText }} className="lg:col-span-5">
+        <m.div style={{ y: yText }} className="lg:col-span-5">
           <span className="font-mono text-xs uppercase tracking-[0.3em] text-cyan-600">
             — Liquid Studio
           </span>
@@ -60,17 +60,17 @@ export function HomeShowcaseSection() {
             Try the studio
             <ArrowUpRight className="h-4 w-4 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
           </a>
-        </motion.div>
+        </m.div>
 
         <div className="relative lg:col-span-7">
-          <motion.div
+          <m.div
             style={{ scale }}
             className="relative aspect-[5/4] overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-[0_40px_120px_-20px_rgba(31,64,175,0.25)]"
           >
             <LiquidField />
 
             {/* floating glass panels */}
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -95,9 +95,9 @@ export function HomeShowcaseSection() {
                   Apply
                 </span>
               </div>
-            </motion.div>
+            </m.div>
 
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -126,11 +126,11 @@ export function HomeShowcaseSection() {
                   </div>
                 ))}
               </div>
-            </motion.div>
+            </m.div>
 
             {/* light flare */}
             <div className="pointer-events-none absolute -top-32 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-sky-300/40 blur-3xl" />
-          </motion.div>
+          </m.div>
         </div>
       </div>
     </section>

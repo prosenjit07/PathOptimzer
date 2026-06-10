@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { m, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { ArrowRight } from "lucide-react";
 import { LiquidField } from "./LiquidField";
@@ -20,7 +20,7 @@ export function HomeCTA() {
       className="relative overflow-hidden py-32"
     >
       <div className="mx-auto max-w-7xl px-6">
-        <motion.div
+        <m.div
           style={{ y }}
           className="relative isolate overflow-hidden rounded-[2.5rem] border border-slate-200 bg-white px-6 py-20 shadow-[0_40px_120px_-30px_rgba(31,64,175,0.3)] sm:px-16 sm:py-28"
         >
@@ -72,7 +72,7 @@ export function HomeCTA() {
               </p>
             </div>
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

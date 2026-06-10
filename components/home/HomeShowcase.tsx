@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
+import { m, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 
 const stats = [
@@ -59,7 +59,7 @@ function StatItem({
   const ref = useRef<HTMLDivElement | null>(null);
   const inView = useInView(ref, { once: true, margin: "-50px" });
   return (
-    <motion.div
+    <m.div
       ref={ref}
       initial={{ opacity: 0, y: 30 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -71,7 +71,7 @@ function StatItem({
         {s.kpi}
       </div>
       <p className="mt-2 text-sm text-slate-500">{s.label}</p>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -112,7 +112,7 @@ function FAQItem({
   const ref = useRef<HTMLLIElement | null>(null);
   const inView = useInView(ref, { once: true, margin: "-50px" });
   return (
-    <motion.li
+    <m.li
       ref={ref}
       initial={{ opacity: 0, y: 20 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -124,14 +124,14 @@ function FAQItem({
         className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
       >
         <span className="font-instrument text-xl text-slate-900">{f.q}</span>
-        <motion.span
+        <m.span
           animate={{ rotate: open ? 45 : 0 }}
           className="grid h-7 w-7 place-items-center rounded-full border border-slate-200 bg-white text-slate-700"
         >
           +
-        </motion.span>
+        </m.span>
       </button>
-      <motion.div
+      <m.div
         initial={false}
         animate={{ height: open ? "auto" : 0, opacity: open ? 1 : 0 }}
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
@@ -140,7 +140,7 @@ function FAQItem({
         <p className="px-6 pb-6 text-sm leading-relaxed text-slate-600">
           {f.a}
         </p>
-      </motion.div>
-    </motion.li>
+      </m.div>
+    </m.li>
   );
 }

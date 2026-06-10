@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
+import { m, useInView } from "framer-motion";
 import { useRef } from "react";
 import { FileText, Mail, Briefcase, BarChart3, Sparkles, Wand2 } from "lucide-react";
 
@@ -62,7 +62,7 @@ export function HomeFeatures() {
 
       <div className="mx-auto max-w-7xl px-6">
         <div ref={wrap} className="mb-16 grid grid-cols-1 items-end gap-6 md:grid-cols-12">
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 30 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7 }}
@@ -76,8 +76,8 @@ export function HomeFeatures() {
               <br />
               <span className="italic text-slate-500">one continuous gesture.</span>
             </h2>
-          </motion.div>
-          <motion.p
+          </m.div>
+          <m.p
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.15 }}
@@ -86,7 +86,7 @@ export function HomeFeatures() {
             Every module talks to every other. Update your résumé and your
             cover letter, outreach, and interview brief all re-mold
             themselves — the way ink follows water.
-          </motion.p>
+          </m.p>
         </div>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -110,7 +110,7 @@ function FeatureCard({
   const inView = useInView(ref, { once: true, margin: "-50px" });
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       initial={{ opacity: 0, y: 40 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -127,12 +127,12 @@ function FeatureCard({
       </div>
 
       <div className="relative flex items-start justify-between">
-        <motion.div
+        <m.div
           whileHover={{ rotate: 8, scale: 1.08 }}
           className={`grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br ${feature.accent} text-white shadow-lg`}
         >
           <feature.icon className="h-5 w-5" />
-        </motion.div>
+        </m.div>
         <span className="font-mono text-xs tracking-widest text-slate-400">
           {feature.n}
         </span>
@@ -154,6 +154,6 @@ function FeatureCard({
           Explore →
         </span>
       </div>
-    </motion.div>
+    </m.div>
   );
 }

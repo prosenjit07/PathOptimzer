@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Github, Twitter, Linkedin, ArrowUpRight } from "lucide-react";
 
 const columns = [
@@ -59,14 +59,14 @@ export function HomeFooter() {
                 { icon: Github, href: "https://github.com/prosenjit07" },
                 { icon: Linkedin, href: "#" },
               ].map((s, i) => (
-                <motion.a
+                <m.a
                   key={i}
                   href={s.href}
                   whileHover={{ y: -2 }}
                   className="grid h-9 w-9 place-items-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:text-slate-900"
                 >
                   <s.icon className="h-4 w-4" />
-                </motion.a>
+                </m.a>
               ))}
             </div>
           </div>

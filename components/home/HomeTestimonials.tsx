@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { m, useInView, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { Quote, Star } from "lucide-react";
 
@@ -109,7 +109,7 @@ function VoiceCard({
   const y = useTransform(scrollYProgress, [0, 1], [40, -40]);
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       initial={{ opacity: 0, y: 40 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -120,12 +120,12 @@ function VoiceCard({
         className={`pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full bg-gradient-to-br ${v.accent} opacity-20 blur-2xl transition-opacity duration-500 group-hover:opacity-40`}
       />
       <Quote className="h-7 w-7 text-sky-500" />
-      <motion.p
+      <m.p
         style={{ y }}
         className="mt-5 font-instrument text-2xl leading-snug text-slate-800"
       >
         &ldquo;{v.quote}&rdquo;
-      </motion.p>
+      </m.p>
       <div className="mt-7 flex items-center gap-3">
         <div
           className={`grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br ${v.accent} font-mono text-sm font-bold text-white shadow`}
@@ -140,6 +140,6 @@ function VoiceCard({
           <div className="text-xs text-slate-500">{v.role}</div>
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 }
