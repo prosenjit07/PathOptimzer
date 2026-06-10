@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { m, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useEffect, useRef } from "react";
 
 /**
@@ -51,7 +51,7 @@ export function LiquidOrb({
       className={`relative isolate ${className}`}
       style={{ width: size, height: size }}
     >
-      <motion.div
+      <m.div
         className="absolute inset-0"
         style={{ rotateX: rx, rotateY: ry, transformPerspective: 1200 }}
       >
@@ -65,7 +65,7 @@ export function LiquidOrb({
           }}
         />
         {/* iridescent body */}
-        <motion.svg
+        <m.svg
           viewBox="0 0 200 200"
           className="relative h-full w-full"
           style={{ x: px, y: py }}
@@ -101,7 +101,7 @@ export function LiquidOrb({
             </filter>
           </defs>
 
-          <motion.g
+          <m.g
             filter="url(#orbGoo)"
             animate={{ rotate: 360 }}
             transition={{ duration: 38, repeat: Infinity, ease: "linear" }}
@@ -114,7 +114,7 @@ export function LiquidOrb({
               { cx: 60, cy: 130, r: 30, fill: "#67e8f9" },
               { cx: 140, cy: 130, r: 28, fill: "#c4b5fd" },
             ].map((c, i) => (
-              <motion.circle
+              <m.circle
                 key={i}
                 cx={c.cx}
                 cy={c.cy}
@@ -131,7 +131,7 @@ export function LiquidOrb({
                 }}
               />
             ))}
-          </motion.g>
+          </m.g>
 
           <circle
             cx="100"
@@ -158,8 +158,8 @@ export function LiquidOrb({
             fill="rgba(255,255,255,0.18)"
             transform="rotate(-22 120 140)"
           />
-        </motion.svg>
-      </motion.div>
+        </m.svg>
+      </m.div>
     </div>
   );
 }

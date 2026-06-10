@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { m, useScroll, useTransform, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Sparkles, FileText, Mail, Send, CheckCircle2 } from "lucide-react";
 
@@ -68,7 +68,7 @@ export function HomeWorkflow() {
           {/* progress line */}
           <div className="relative hidden lg:block">
             <div className="absolute left-[27px] top-2 h-[calc(100%-1rem)] w-px bg-slate-200" />
-            <motion.div
+            <m.div
               style={{ height: lineHeight }}
               className="absolute left-[27px] top-2 w-px bg-gradient-to-b from-sky-500 via-blue-500 to-violet-500"
             />
@@ -108,7 +108,7 @@ function Step({
   const ref = useRef<HTMLLIElement | null>(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
   return (
-    <motion.li
+    <m.li
       ref={ref}
       initial={{ opacity: 0, x: -20 }}
       animate={inView ? { opacity: 1, x: 0 } : {}}
@@ -128,7 +128,7 @@ function Step({
         <step.icon className="h-3 w-3" />
         Step {index + 1} of {steps.length}
       </div>
-    </motion.li>
+    </m.li>
   );
 }
 
@@ -148,7 +148,7 @@ function WorkflowMockup() {
         </div>
 
         <div className="mt-6 space-y-3">
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -162,9 +162,9 @@ function WorkflowMockup() {
             <div className="mt-2 font-mono text-xs text-slate-700">
               linkedin.com/in/mira-kapoor · 9y PM
             </div>
-          </motion.div>
+          </m.div>
 
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -180,20 +180,20 @@ function WorkflowMockup() {
             </div>
             <div className="mt-2 grid grid-cols-3 gap-1">
               {[1, 2, 3, 4, 5, 6].map((i) => (
-                <motion.div
-                  key={i}
-                  initial={{ scaleX: 0 }}
-                  whileInView={{ scaleX: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.4 + i * 0.05, duration: 0.4 }}
-                  className="h-1.5 origin-left rounded-full bg-gradient-to-r from-emerald-300 to-emerald-500"
-                  style={{ width: `${30 + (i * 11) % 70}%` }}
-                />
+                <m.div
+                    key={i}
+                    initial={{ scaleX: 0 }}
+                    whileInView={{ scaleX: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.4 + i * 0.05, duration: 0.4 }}
+                    className="h-1.5 origin-left rounded-full bg-gradient-to-r from-emerald-200 to-emerald-500"
+                    style={{ width: `${30 + (i * 11) % 70}%` }}
+                  />
               ))}
             </div>
-          </motion.div>
+          </m.div>
 
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -210,7 +210,7 @@ function WorkflowMockup() {
             <div className="mt-3 flex h-16 items-end gap-1">
               {[28, 42, 36, 58, 47, 62, 75, 64, 82, 70, 90, 78, 95].map(
                 (h, i) => (
-                  <motion.div
+                  <m.div
                     key={i}
                     initial={{ scaleY: 0 }}
                     whileInView={{ scaleY: 1 }}
@@ -222,7 +222,7 @@ function WorkflowMockup() {
                 )
               )}
             </div>
-          </motion.div>
+          </m.div>
         </div>
       </div>
 

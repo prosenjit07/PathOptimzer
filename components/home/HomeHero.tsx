@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { m, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { ArrowRight, ArrowDown, Play, Stars, Cpu, Mail, FileText, Briefcase } from "lucide-react";
 import { LiquidOrb } from "./LiquidOrb";
@@ -29,17 +29,17 @@ export function HomeHero() {
         <div className="absolute inset-0 bg-[radial-gradient(40%_35%_at_80%_20%,rgba(196,181,253,0.35),transparent_60%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(40%_35%_at_15%_70%,rgba(186,230,253,0.45),transparent_60%)]" />
         <div className="absolute inset-0 bg-grid-faint [background-size:64px_64px] [mask-image:radial-gradient(60%_60%_at_50%_30%,black,transparent_75%)] opacity-60" />
-        <motion.div
+        <m.div
           className="absolute -top-32 left-1/2 h-[44rem] w-[44rem] -translate-x-1/2 rounded-full liquid-bleed"
           animate={{ rotate: 360 }}
           transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
         />
       </div>
 
-      <motion.div style={{ y, opacity, scale }} className="mx-auto max-w-7xl px-6">
+      <m.div style={{ y, opacity, scale }} className="mx-auto max-w-7xl px-6">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12">
           <div className="lg:col-span-7">
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
@@ -55,9 +55,9 @@ export function HomeHero() {
               <span className="ml-1 rounded-full bg-slate-900 px-1.5 py-0.5 text-[10px] font-medium text-white">
                 liquid
               </span>
-            </motion.div>
+            </m.div>
 
-            <motion.h1
+            <m.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
@@ -75,7 +75,7 @@ export function HomeHero() {
                     className="absolute -bottom-2 left-0 w-full text-sky-500"
                     fill="none"
                   >
-                    <motion.path
+                    <m.path
                       d="M2 6 Q 50 0 100 6 T 200 6 T 298 6"
                       stroke="currentColor"
                       strokeWidth="2"
@@ -87,18 +87,18 @@ export function HomeHero() {
                   </svg>
                 </span>
               </span>
-            </motion.h1>
+            </m.h1>
 
-            <motion.p
+            <m.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}
               className="mt-7 max-w-xl text-balance text-lg text-slate-600"
             >
              PathOptimizer is a generative career platform that crafts résumé and cover letter and sends them to recruiters on your behalf, streamlining your job application process end-to-end.
-            </motion.p>
+            </m.p>
 
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.35 }}
@@ -124,9 +124,9 @@ export function HomeHero() {
                 </span>
                 Watch the showcase
               </Link>
-            </motion.div>
+            </m.div>
 
-            <motion.dl
+            <m.dl
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.5 }}
@@ -146,10 +146,10 @@ export function HomeHero() {
                   </dd>
                 </div>
               ))}
-            </motion.dl>
+            </m.dl>
           </div>
 
-          <motion.div
+          <m.div
             initial={{ opacity: 0, scale: 0.85 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
@@ -170,7 +170,7 @@ export function HomeHero() {
               ].map((chip, i) => {
                 const rad = (chip.angle * Math.PI) / 180;
                 return (
-                  <motion.div
+                  <m.div
                     key={chip.label}
                     initial={{ opacity: 0, scale: 0.5 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -184,20 +184,20 @@ export function HomeHero() {
                       }px)`,
                     }}
                   >
-                    <motion.div
+                    <m.div
                       animate={{ y: [0, -6, 0] }}
                       transition={{ duration: 4 + i, repeat: Infinity, ease: "easeInOut" }}
                       className={`flex items-center gap-1.5 rounded-full border ${chip.color} px-3 py-1.5 text-xs font-medium shadow-lg backdrop-blur`}
                     >
                       <chip.icon className="h-3 w-3" />
                       {chip.label}
-                    </motion.div>
-                  </motion.div>
+                    </m.div>
+                  </m.div>
                 );
               })}
 
               {/* floating glass card */}
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.2, duration: 0.8 }}
@@ -214,12 +214,12 @@ export function HomeHero() {
                   <span>— mira.k</span>
                   <span>now @ Stripe</span>
                 </div>
-              </motion.div>
+              </m.div>
             </div>
-          </motion.div>
+          </m.div>
         </div>
 
-        <motion.div
+        <m.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.2, duration: 0.6 }}
@@ -232,8 +232,8 @@ export function HomeHero() {
             Scroll into the studio
             <ArrowDown className="h-4 w-4 animate-bounce" />
           </Link>
-        </motion.div>
-      </motion.div>
+        </m.div>
+      </m.div>
     </section>
   );
 }

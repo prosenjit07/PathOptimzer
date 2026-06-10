@@ -2,7 +2,12 @@
 
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import {
+  m,
+  AnimatePresence,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { useEffect, useState } from "react";
 import { Menu, X, Sparkles, ArrowUpRight } from "lucide-react";
 
@@ -28,13 +33,13 @@ export function HomeNav() {
   }, []);
 
   return (
-    <motion.header
+    <m.header
       initial={{ y: -40, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6"
     >
-      <motion.nav
+      <m.nav
         style={{ backdropFilter: useTransform(blur, (b) => `blur(${b}px)`) }}
         className={`mx-auto flex max-w-7xl items-center justify-between rounded-full border border-slate-200/70 bg-white/70 px-4 py-2.5 shadow-[0_10px_40px_-15px_rgba(31,64,175,0.18)] transition-colors sm:px-5 ${
           scrolled ? "bg-white/85" : "bg-white/60"
@@ -104,31 +109,31 @@ export function HomeNav() {
         >
           <AnimatePresence mode="wait">
             {open ? (
-              <motion.span
+              <m.span
                 key="x"
                 initial={{ rotate: -90, opacity: 0 }}
                 animate={{ rotate: 0, opacity: 1 }}
                 exit={{ rotate: 90, opacity: 0 }}
               >
                 <X className="h-4 w-4" />
-              </motion.span>
+              </m.span>
             ) : (
-              <motion.span
+              <m.span
                 key="m"
                 initial={{ rotate: 90, opacity: 0 }}
                 animate={{ rotate: 0, opacity: 1 }}
                 exit={{ rotate: -90, opacity: 0 }}
               >
                 <Menu className="h-4 w-4" />
-              </motion.span>
+              </m.span>
             )}
           </AnimatePresence>
         </button>
-      </motion.nav>
+      </m.nav>
 
       <AnimatePresence>
         {open && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
@@ -164,9 +169,9 @@ export function HomeNav() {
                 Start free
               </Link>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
-    </motion.header>
+    </m.header>
   );
 }
