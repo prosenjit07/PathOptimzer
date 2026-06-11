@@ -5,7 +5,6 @@ import { useAtomValue } from "jotai";
 import dynamic from "next/dynamic";
 import Script from "next/script";
 import { Loader2, FileWarning } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import {
   profileData,
   educationData,
@@ -26,6 +25,50 @@ declare global {
   interface Window {
     $typst?: any;
   }
+}
+
+// Helper functions to format data for Typst
+function formatProfileForTypst(profile: any): string {
+  if (!profile) return "(:)";
+  const parts: string[] = [];
+  if (profile.name) parts.push(`name: "${escapeTypstString(profile.name)}"`);
+  if (profile.email) parts.push(`email: "${escapeTypstString(profile.email)}"`);
+  if (profile.phone) parts.push(`phone: "${escapeTypstString(profile.phone)}"`);
+  if (profile.location) parts.push(`location: "${escapeTypstString(profile.location)}"`);
+  if (profile.github) parts.push(`github: "${escapeTypstString(profile.github)}"`);
+  if (profile.linkedin) parts.push(`linkedin: "${escapeTypstString(profile.linkedin)}"`);
+  if (profile.website) parts.push(`personal-site: "${escapeTypstString(profile.website)}"`);
+  return "(" + parts.join(", ") + ")";
+}
+
+function formatArrayForTypst(items: any[]): string {
+  if (!items || items.length === 0) return "()";
+  const formatted = items.map(item => {
+    const pairs: string[] = [];
+    for (const [key, value] of Object.entries(item)) {
+      if (value !== undefined && value !== null) {
+        if (typeof value === 'string') {
+          pairs.push(`${key}: "${escapeTypstString(value)}"`);
+        } else if (Array.isArray(value)) {
+          pairs.push(`${key}: (${value.map(v => `"${escapeTypstString(String(v))}"`).join(", ")})`);
+        } else {
+          pairs.push(`${key}: ${value}`);
+        }
+      }
+    }
+    return "(" + pairs.join(", ") + ")";
+  });
+  return "(" + formatted.join(", ") + ")";
+}
+
+function escapeTypstString(str: string): string {
+  if (!str) return "";
+  return str
+    .replace(/\\/g, "\\\\")
+    .replace(/"/g, "\\\"")
+    .replace(/\n/g, "\\n")
+    .replace(/\r/g, "\\r")
+    .replace(/\t/g, "\\t");
 }
 
 const ResumePreview = ({
@@ -49,7 +92,7 @@ const ResumePreview = ({
   const [template, setTemplate] = useState<string | null>(null);
   const lastDownloadRef = useRef(download);
 
-  // Build the JSON payload the source marlincv Preview.tsx produces
+  // Build the JSON payload
   const payload = {
     profile,
     education: education.filter((e) => e.selected),
@@ -63,12 +106,18 @@ const ResumePreview = ({
   // Load the stephen.typ template once
   useEffect(() => {
     let cancelled = false;
+    console.log("[ResumePreview] Loading template...");
     fetch("/ats/templates/stephen.typ")
-      .then((r) => (r.ok ? r.text() : Promise.reject(new Error("template not found"))))
+      .then((r) => {
+        console.log("[ResumePreview] Template fetch response:", r.status, r.ok);
+        return r.ok ? r.text() : Promise.reject(new Error(`template not found: ${r.status}`));
+      })
       .then((t) => {
+        console.log("[ResumePreview] Template loaded, length:", t.length);
         if (!cancelled) setTemplate(t);
       })
       .catch((e) => {
+        console.error("[ResumePreview] Failed to load template:", e);
         if (!cancelled) setTypstError(`Failed to load template: ${e.message}`);
       });
     return () => {
@@ -78,25 +127,73 @@ const ResumePreview = ({
 
   // Re-compile when template or payload changes (debounced 300ms)
   useEffect(() => {
-    if (!ready || !template) return;
+    if (!ready || !template) {
+      console.log("[ResumePreview] Skipping compile - ready:", ready, "template:", !!template);
+      return;
+    }
     const t = setTimeout(async () => {
       const start = performance.now();
       try {
-        // The @myriaddreamin/typst.react API takes a `source` (the template)
-        // and `artifact` (the JSON data injected via #let on the template side).
-        // We build the document by concatenating a JSON dump as the artifact
-        // that the template can include.
-        const json = JSON.stringify(payload, null, 2);
-        const source = template.replace(
-          "#let data = json(\"\")",
-          `#let data = json(\`${json.replace(/`/g, "\\`")}\`)`
-        );
-        const next = await window.$typst?.compile(source);
+        console.log("[ResumePreview] Starting compile...");
+        
+        // Check if $typst is available
+        if (!window.$typst) {
+          console.error("[ResumePreview] window.$typst is not available");
+          setTypstError("Typst runtime not available");
+          return;
+        }
+        
+        // Check if compile method exists
+        if (typeof window.$typst.compile !== 'function') {
+          console.error("[ResumePreview] window.$typst.compile is not a function");
+          setTypstError("Typst compiler not available");
+          return;
+        }
+        
+        // The template uses {{placeholder}} syntax for replacements
+        // Replace each placeholder with the corresponding JSON data
+        let source = template;
+        
+        // Replace {{profile}} with profile data as Typst dict
+        const profileStr = profile ? formatProfileForTypst(profile) : "(:)";
+        source = source.replace(/\{\{profile\}\}/g, profileStr);
+        
+        // Replace other placeholders with JSON arrays
+        source = source.replace(/\{\{education\}\}/g, formatArrayForTypst(payload.education));
+        source = source.replace(/\{\{experience\}\}/g, formatArrayForTypst(payload.experience));
+        source = source.replace(/\{\{project\}\}/g, formatArrayForTypst(payload.project));
+        source = source.replace(/\{\{achievement\}\}/g, formatArrayForTypst(payload.achievement));
+        source = source.replace(/\{\{skill\}\}/g, formatArrayForTypst(payload.skill));
+        
+        // Replace theme color
+        source = source.replace(/accent-color:\s*"[^"]*"/, `accent-color: "${themeColor || "#26428b"}"`);
+        
+        console.log("[ResumePreview] Compiling with source length:", source.length);
+        console.log("[ResumePreview] Source preview:", source.substring(0, 500));
+        
+        // The $typst.compile() expects an options object with mainContent or mainFilePath
+        // See: https://github.com/Myriad-Dreamin/typst.ts/blob/main/packages/typst.ts/src/contrib/snippet.mts
+        const compileOptions = {
+          mainContent: source,
+          // mainFilePath: "/main.typ", // Optional: use default
+        };
+        
+        const result = await window.$typst.compile(compileOptions);
+        
+        console.log("[ResumePreview] Compile result:", result ? "success" : "undefined");
+        
+        // The result may be wrapped in a result object
+        const next = result?.result || result;
+        
         if (next) {
           setArtifact(next);
           onRenderTime?.(performance.now() - start);
+        } else {
+          console.error("[ResumePreview] Compile returned undefined");
+          setTypstError("Compilation failed - returned undefined");
         }
       } catch (e: any) {
+        console.error("[ResumePreview] Compile error:", e);
         setTypstError(e?.message || "Typst compile failed");
       }
     }, 300);
