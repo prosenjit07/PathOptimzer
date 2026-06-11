@@ -95,7 +95,7 @@ export function HomeHero() {
               transition={{ duration: 0.7, delay: 0.2 }}
               className="mt-7 max-w-xl text-balance text-lg text-slate-600"
             >
-             PathOptimizer is a generative career platform that crafts résumé and cover letter and sends them to recruiters on your behalf, streamlining your job application process end-to-end.
+             PathOptimizer is a generative career platform that crafts résumé and cover letter and automate HR outreach, streamlining your job application process end-to-end.
             </m.p>
 
             <m.div
