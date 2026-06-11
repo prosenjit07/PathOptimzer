@@ -121,10 +121,13 @@ const Category = ({
   const [open, setOpen] = useState(true);
   return (
     <Draggable draggableId={category.id} index={index}>
-      {(provided) => (
+      {(provided) => {
+        const { style, ...restDraggableProps } = provided.draggableProps;
+        return (
         <div
           ref={provided.innerRef}
-          {...provided.draggableProps}
+          {...restDraggableProps}
+          style={style as React.CSSProperties}
           className="mb-4 w-full"
         >
           <Card>
@@ -165,10 +168,13 @@ const Category = ({
                       <div {...p.droppableProps} ref={p.innerRef} className="space-y-2">
                         {category.skills.map((s, j) => (
                           <Draggable key={s.id} draggableId={`${index}-${s.id}`} index={j}>
-                            {(rp) => (
+                            {(rp) => {
+                              const { style: rStyle, ...restRDraggableProps } = rp.draggableProps;
+                              return (
                               <div
                                 ref={rp.innerRef}
-                                {...rp.draggableProps}
+                                {...restRDraggableProps}
+                                style={rStyle as React.CSSProperties}
                                 className="flex items-center space-x-2"
                               >
                                 <div {...rp.dragHandleProps}>
@@ -196,7 +202,8 @@ const Category = ({
                                   <Trash2 className="h-4 w-4" />
                                 </Button>
                               </div>
-                            )}
+                              );
+                            }}
                           </Draggable>
                         ))}
                         {p.placeholder}
@@ -211,7 +218,8 @@ const Category = ({
             </CardContent>
           </Card>
         </div>
-      )}
+        );
+      }}
     </Draggable>
   );
 };
