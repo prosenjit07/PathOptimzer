@@ -3,7 +3,7 @@
 import { UserButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Mail, FileText } from "lucide-react";
+import { Mail, FileText, Sparkles } from "lucide-react";
 import React from "react";
 
 const Header = () => {
@@ -13,6 +13,7 @@ const Header = () => {
 
   const navItems = [
     { href: "/dashboard", label: "Resumes", icon: FileText },
+    { href: "/dashboard/ats-resume", label: "ATS Resume", icon: Sparkles },
     { href: "/dashboard/email-automation", label: "Email Automation", icon: Mail },
   ];
 

@@ -2,6 +2,7 @@
 
 import AddResume from "@/components/common/AddResume";
 import ResumeCard from "@/components/common/ResumeCard";
+import ATSResumeCta from "@/components/common/ATSResumeCta";
 import { fetchUserResumes } from "@/lib/actions/resume.actions";
 import { useUser } from "@clerk/nextjs";
 import React, { useEffect, useState } from "react";
@@ -27,6 +28,9 @@ const DashboardCards = () => {
 
   return (
     <>
+      <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-3">
+        <ATSResumeCta userId={userId} />
+      </div>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 mt-10 gap-8">
         <AddResume userId={userId} />
 
