@@ -123,8 +123,14 @@ const Entry = ({
   const [open, setOpen] = useState(true);
   return (
     <Draggable draggableId={proj.id} index={index}>
-      {(provided) => (
-        <div ref={provided.innerRef} {...provided.draggableProps}>
+      {(provided) => {
+        const { style, ...restDraggableProps } = provided.draggableProps;
+        return (
+        <div 
+          ref={provided.innerRef} 
+          {...restDraggableProps}
+          style={style as React.CSSProperties}
+        >
           <Card>
             <CardContent className="space-y-2 pt-6">
               <div className="flex items-center justify-between">
@@ -185,8 +191,15 @@ const Entry = ({
                       <div {...p.droppableProps} ref={p.innerRef} className="space-y-2">
                         {proj.responsibilities.map((r, j) => (
                           <Draggable key={r.id} draggableId={`${index}-${r.id}`} index={j}>
-                            {(rp) => (
-                              <div ref={rp.innerRef} {...rp.draggableProps} className="flex items-center space-x-2">
+                            {(rp) => {
+                              const { style: rStyle, ...restRDraggableProps } = rp.draggableProps;
+                              return (
+                              <div 
+                                ref={rp.innerRef} 
+                                {...restRDraggableProps}
+                                style={rStyle as React.CSSProperties}
+                                className="flex items-center space-x-2"
+                              >
                                 <div {...rp.dragHandleProps}>
                                   <GripVertical className="text-gray-400" />
                                 </div>
@@ -203,7 +216,8 @@ const Entry = ({
                                   <Trash2 className="h-4 w-4" />
                                 </Button>
                               </div>
-                            )}
+                              );
+                            }}
                           </Draggable>
                         ))}
                         {p.placeholder}
@@ -219,7 +233,8 @@ const Entry = ({
             </CardContent>
           </Card>
         </div>
-      )}
+        );
+      }}
     </Draggable>
   );
 };

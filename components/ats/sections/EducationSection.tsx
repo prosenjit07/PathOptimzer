@@ -140,8 +140,14 @@ const EducationEntry = ({
   const [open, setOpen] = useState(true);
   return (
     <Draggable draggableId={edu.id} index={index}>
-      {(provided) => (
-        <div ref={provided.innerRef} {...provided.draggableProps}>
+      {(provided) => {
+        const { style, ...restDraggableProps } = provided.draggableProps;
+        return (
+        <div 
+          ref={provided.innerRef} 
+          {...restDraggableProps}
+          style={style as React.CSSProperties}
+        >
           <Card>
             <CardContent className="space-y-2 pt-6">
               <div className="flex items-center justify-between">
@@ -272,10 +278,13 @@ const EducationEntry = ({
                             index={j}
                             key={r.id}
                           >
-                            {(rp) => (
+                            {(rp) => {
+                              const { style: rStyle, ...restRDraggableProps } = rp.draggableProps;
+                              return (
                               <div
                                 ref={rp.innerRef}
-                                {...rp.draggableProps}
+                                {...restRDraggableProps}
+                                style={rStyle as React.CSSProperties}
                                 className="flex items-center space-x-2"
                               >
                                 <div {...rp.dragHandleProps}>
@@ -308,7 +317,8 @@ const EducationEntry = ({
                                   <Trash2 className="h-4 w-4" />
                                 </Button>
                               </div>
-                            )}
+                              );
+                            }}
                           </Draggable>
                         ))}
                         {p.placeholder}
@@ -324,7 +334,8 @@ const EducationEntry = ({
             </CardContent>
           </Card>
         </div>
-      )}
+        );
+      }}
     </Draggable>
   );
 };
