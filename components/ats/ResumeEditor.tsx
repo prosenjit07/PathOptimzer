@@ -27,6 +27,7 @@ import {
   skillData,
   renderTimeData,
   downloadData,
+  getEmptyProfile,
 } from "@/lib/ats/store";
 import { updateATSResume } from "@/lib/actions/ats-resume.actions";
 
@@ -61,7 +62,12 @@ const ResumeEditor = ({
   useEffect(() => {
     if (hydrated.current || !initialData) return;
     hydrated.current = true;
-    if (initialData.profile) setProfile(initialData.profile);
+    // Only hydrate the profile if it has at least one populated field —
+    // a freshly created resume has profile = {} which would clobber the
+    // store defaults (e.g. the `socials` array).
+    if (initialData.profile && Object.keys(initialData.profile).length > 0) {
+      setProfile({ ...getEmptyProfile(), ...initialData.profile });
+    }
     if (initialData.education?.length) setEducation(initialData.education);
     if (initialData.experience?.length) setExperience(initialData.experience);
     if (initialData.project?.length) setProject(initialData.project);
@@ -130,7 +136,7 @@ const ResumeEditor = ({
       : "All changes auto-save";
 
   return (
-    <div className="flex h-[calc(100vh-64px)] flex-col">
+    <div className="flex min-h-[calc(100vh-64px)] flex-col">
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 bg-white/80 px-4 py-2 backdrop-blur">
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon" onClick={() => router.push("/dashboard/ats-resume")}>
@@ -189,7 +195,7 @@ const ResumeEditor = ({
         </div>
       </div>
 
-      <ResizablePanelGroup direction="horizontal" className="flex-1">
+      <ResizablePanelGroup direction="horizontal" className="flex-1 overflow-hidden">
         <ResizablePanel defaultSize={50} minSize={30} className="overflow-y-auto bg-slate-50">
           <div className="space-y-4 p-4">
             <ProfileSection />
@@ -201,7 +207,7 @@ const ResumeEditor = ({
           </div>
         </ResizablePanel>
         <ResizableHandle withHandle />
-        <ResizablePanel defaultSize={50} minSize={30} className="overflow-y-auto bg-slate-100">
+        <ResizablePanel defaultSize={50} minSize={30} className="overflow-auto bg-slate-100">
           <ResumePreview
             themeColor={initialThemeColor}
             onRenderTime={(t) => setRenderTime(t)}
