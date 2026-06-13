@@ -27,6 +27,12 @@ import {
   skillData,
   renderTimeData,
   downloadData,
+  getEmptyProfile,
+  getEmptyEducation,
+  getEmptyExperience,
+  getEmptyProject,
+  getEmptyAchievement,
+  getEmptySkill,
 } from "@/lib/ats/store";
 import { updateATSResume } from "@/lib/actions/ats-resume.actions";
 
@@ -56,18 +62,70 @@ const ResumeEditor = ({
   const [renderTime, setRenderTime] = useAtom(renderTimeData);
   const [download, setDownload] = useAtom(downloadData);
 
-  // Hydrate once from server-provided initial data
+  // Hydrate from server-provided initial data and reset store state on id change
   const hydrated = useRef(false);
+  const lastIdRef = useRef(atsResumeId);
+
   useEffect(() => {
+    if (lastIdRef.current !== atsResumeId) {
+      hydrated.current = false;
+      lastIdRef.current = atsResumeId;
+    }
+
     if (hydrated.current || !initialData) return;
     hydrated.current = true;
-    if (initialData.profile) setProfile(initialData.profile);
-    if (initialData.education?.length) setEducation(initialData.education);
-    if (initialData.experience?.length) setExperience(initialData.experience);
-    if (initialData.project?.length) setProject(initialData.project);
-    if (initialData.achievement?.length) setAchievement(initialData.achievement);
-    if (initialData.skill?.length) setSkill(initialData.skill);
-  }, [initialData, setProfile, setEducation, setExperience, setProject, setAchievement, setSkill]);
+
+    // Populate profile or reset to default
+    if (initialData.profile && Object.keys(initialData.profile).length > 0) {
+      setProfile({ ...getEmptyProfile(), ...initialData.profile });
+    } else {
+      setProfile(getEmptyProfile());
+    }
+
+    // Populate education or reset to default
+    if (initialData.education?.length) {
+      setEducation(initialData.education);
+    } else {
+      setEducation([getEmptyEducation()]);
+    }
+
+    // Populate experience or reset to default
+    if (initialData.experience?.length) {
+      setExperience(initialData.experience);
+    } else {
+      setExperience([getEmptyExperience()]);
+    }
+
+    // Populate project or reset to default
+    if (initialData.project?.length) {
+      setProject(initialData.project);
+    } else {
+      setProject([getEmptyProject()]);
+    }
+
+    // Populate achievement or reset to default
+    if (initialData.achievement?.length) {
+      setAchievement(initialData.achievement);
+    } else {
+      setAchievement([getEmptyAchievement()]);
+    }
+
+    // Populate skill or reset to default
+    if (initialData.skill?.length) {
+      setSkill(initialData.skill);
+    } else {
+      setSkill([getEmptySkill()]);
+    }
+  }, [
+    atsResumeId,
+    initialData,
+    setProfile,
+    setEducation,
+    setExperience,
+    setProject,
+    setAchievement,
+    setSkill,
+  ]);
 
   // -------- auto-save --------
   const [saveStatus, setSaveStatus] = useState<SaveStatus>("idle");
@@ -130,7 +188,7 @@ const ResumeEditor = ({
       : "All changes auto-save";
 
   return (
-    <div className="flex h-[calc(100vh-64px)] flex-col">
+    <div className="flex min-h-[calc(100vh-64px)] flex-col">
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 bg-white/80 px-4 py-2 backdrop-blur">
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon" onClick={() => router.push("/dashboard/ats-resume")}>
@@ -189,19 +247,19 @@ const ResumeEditor = ({
         </div>
       </div>
 
-      <ResizablePanelGroup direction="horizontal" className="flex-1">
+      <ResizablePanelGroup direction="horizontal" className="flex-1 overflow-hidden">
         <ResizablePanel defaultSize={50} minSize={30} className="overflow-y-auto bg-slate-50">
           <div className="space-y-4 p-4">
             <ProfileSection />
-            <ExperienceSection />
             <EducationSection />
-            <ProjectSection />
+            <ExperienceSection />
             <SkillSection />
+            <ProjectSection />
             <AchievementSection />
           </div>
         </ResizablePanel>
         <ResizableHandle withHandle />
-        <ResizablePanel defaultSize={50} minSize={30} className="overflow-y-auto bg-slate-100">
+        <ResizablePanel defaultSize={50} minSize={30} className="overflow-auto bg-slate-100">
           <ResumePreview
             themeColor={initialThemeColor}
             onRenderTime={(t) => setRenderTime(t)}
