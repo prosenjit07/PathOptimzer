@@ -26,7 +26,7 @@ declare global {
 const COMPILER_WASM_URL = "/ats/typst_ts_web_compiler_bg.wasm";
 const RENDERER_WASM_URL = "/ats/typst_ts_renderer_bg.wasm";
 const BUNDLE_URL = "/ats/all-in-one-lite.bundle.js";
-const TEMPLATE_URL = "/ats/templates/stephen.typ";
+const TEMPLATE_URL = "/ats/templates/Einstein.typ";
 const BUNDLE_LOAD_TIMEOUT_MS = 20000;
 
 // --- helpers -----------------------------------------------------------------
@@ -75,11 +75,12 @@ function formatProfileForTypst(profile: any): string {
   if (github) parts.push(`github: "${escapeTypstString(github)}"`);
   if (linkedin) parts.push(`linkedin: "${escapeTypstString(linkedin)}"`);
   if (personalSite) parts.push(`personal-site: "${escapeTypstString(personalSite)}"`);
+  if (parts.length === 0) return "(:)";
   return "(" + parts.join(", ") + ")";
 }
 
 // Build a Typst array of named-content dicts, e.g.:
-//   ((id: "1", institution: "X", responsibilities: ((text: "..."),)), (...))
+//   ((id: "1", institution: "X", responsibilities: ((text: "..."))), (...))
 function formatArrayForTypst(items: any[]): string {
   if (!items || items.length === 0) return "()";
   const formatted = items.map((item) => {
@@ -89,36 +90,36 @@ function formatArrayForTypst(items: any[]): string {
       if (typeof value === "string") {
         pairs.push(`${key}: "${escapeTypstString(value)}"`);
       } else if (Array.isArray(value)) {
-        pairs.push(`${key}: (${value
-          .map((v) => {
-            if (v && typeof v === "object") {
-              const subPairs: string[] = [];
-              for (const [k, vv] of Object.entries(v)) {
-                if (vv === undefined || vv === null) continue;
-                subPairs.push(
-                  `${k}: ${
-                    typeof vv === "string"
-                      ? `"${escapeTypstString(vv)}"`
-                      : typeof vv === "boolean"
-                      ? `${vv}`
-                      : `${vv}`
-                  }`
-                );
-              }
-              return "(" + subPairs.join(", ") + ")";
+        const subItems = value.map((v) => {
+          if (v && typeof v === "object") {
+            const subPairs: string[] = [];
+            for (const [k, vv] of Object.entries(v)) {
+              if (vv === undefined || vv === null) continue;
+              subPairs.push(
+                `${k}: ${typeof vv === "string"
+                  ? `"${escapeTypstString(vv)}"`
+                  : typeof vv === "boolean"
+                    ? `${vv}`
+                    : `${vv}`
+                }`
+              );
             }
-            return `"${escapeTypstString(String(v))}"`;
-          })
-          .join(", ")})`);
+            if (subPairs.length === 0) return "(:)";
+            return "(" + subPairs.join(", ") + ")";
+          }
+          return `"${escapeTypstString(String(v))}"`;
+        });
+        pairs.push(`${key}: (${subItems.join(", ")}${subItems.length === 1 ? "," : ""})`);
       } else if (typeof value === "boolean") {
         pairs.push(`${key}: ${value}`);
       } else {
         pairs.push(`${key}: ${value}`);
       }
     }
+    if (pairs.length === 0) return "(:)";
     return "(" + pairs.join(", ") + ")";
   });
-  return "(" + formatted.join(", ") + ")";
+  return "(" + formatted.join(", ") + (formatted.length === 1 ? "," : "") + ")";
 }
 
 // Configure the global Typst snippet with our local WASM URLs.
@@ -126,16 +127,66 @@ function configureTypstRuntime() {
   if (typeof window === "undefined" || !window.$typst) {
     throw new Error("Typst runtime not available on window");
   }
-  window.$typst.setCompilerInitOptions({
-    getModule: () => fetch(COMPILER_WASM_URL).then((r) => r.arrayBuffer()),
-  });
-  window.$typst.setRendererInitOptions({
-    getModule: () => fetch(RENDERER_WASM_URL).then((r) => r.arrayBuffer()),
-  });
+  console.log("[configureTypstRuntime] window.$typst available", window.$typst);
+  console.log("[configureTypstRuntime] Compiler WASM URL:", COMPILER_WASM_URL);
+  console.log("[configureTypstRuntime] Renderer WASM URL:", RENDERER_WASM_URL);
+
+  if (typeof window.$typst.cc === "function") {
+    window.$typst.setCompilerInitOptions({
+      getModule: () => {
+        console.log("[configureTypstRuntime] Fetching compiler WASM");
+        return fetch(COMPILER_WASM_URL)
+          .then((r) => {
+            console.log("[configureTypstRuntime] Compiler WASM fetch status:", r.status);
+            if (!r.ok) throw new Error(`Failed to fetch compiler WASM: ${r.status}`);
+            return r.arrayBuffer();
+          })
+          .then((buf) => {
+            console.log("[configureTypstRuntime] Compiler WASM loaded, size:", buf.byteLength);
+            return buf;
+          });
+      },
+    });
+  } else {
+    console.log("[configureTypstRuntime] Compiler already initialized, skipping setCompilerInitOptions");
+  }
+
+  if (typeof window.$typst.ex === "function") {
+    window.$typst.setRendererInitOptions({
+      getModule: () => {
+        console.log("[configureTypstRuntime] Fetching renderer WASM");
+        return fetch(RENDERER_WASM_URL)
+          .then((r) => {
+            console.log("[configureTypstRuntime] Renderer WASM fetch status:", r.status);
+            if (!r.ok) throw new Error(`Failed to fetch renderer WASM: ${r.status}`);
+            return r.arrayBuffer();
+          })
+          .then((buf) => {
+            console.log("[configureTypstRuntime] Renderer WASM loaded, size:", buf.byteLength);
+            return buf;
+          });
+      },
+    });
+  } else {
+    console.log("[configureTypstRuntime] Renderer already initialized, skipping setRendererInitOptions");
+  }
+
   // The React renderer is a separate module instance bundled by webpack,
   // so it has its own static init options that must be set explicitly.
   TypstDocument.setWasmModuleInitOptions({
-    getModule: () => fetch(RENDERER_WASM_URL).then((r) => r.arrayBuffer()),
+    getModule: () => {
+      console.log("[configureTypstRuntime] TypstDocument fetching renderer WASM");
+      return fetch(RENDERER_WASM_URL)
+        .then((r) => {
+          console.log("[configureTypstRuntime] TypstDocument renderer WASM fetch status:", r.status);
+          if (!r.ok) throw new Error(`Failed to fetch TypstDocument renderer WASM: ${r.status}`);
+          return r.arrayBuffer();
+        })
+        .then((buf) => {
+          console.log("[configureTypstRuntime] TypstDocument renderer WASM loaded, size:", buf.byteLength);
+          return buf;
+        });
+    },
     beforeBuild: [],
   });
 }
@@ -152,33 +203,48 @@ function ensureTypstBundle(): Promise<void> {
       resolve();
       return;
     }
-    const onReady = () => {
-      if (window.$typst) resolve();
-      else
-        reject(
-          new Error(
-            "Bundle loaded but window.$typst was not set. The bundle may be from an incompatible version."
-          )
-        );
-    };
+
+    // Inject script tag
     let scriptEl = document.querySelector<HTMLScriptElement>(
       "script[data-ats-typst-bundle]"
     );
     if (!scriptEl) {
       scriptEl = document.createElement("script");
       scriptEl.src = BUNDLE_URL;
-      scriptEl.async = true;
+      scriptEl.type = "module";
       scriptEl.dataset.atsTypstBundle = "true";
       document.head.appendChild(scriptEl);
     }
-    scriptEl.addEventListener("load", onReady, { once: true });
-    scriptEl.addEventListener(
-      "error",
-      () => reject(new Error(`Failed to load ${BUNDLE_URL}`)),
-      { once: true }
-    );
+
+    let resolved = false;
+    const settle = () => {
+      if (resolved) return;
+      if (window.$typst) {
+        resolved = true;
+        resolve();
+      }
+    };
+
+    scriptEl.onload = settle;
+    scriptEl.onerror = (e) => {
+      if (!resolved) {
+        resolved = true;
+        reject(new Error(`Failed to load ${BUNDLE_URL}`));
+      }
+    };
+
+    // Poll as a fallback
+    const pollHandle = setInterval(() => {
+      if (window.$typst) {
+        clearInterval(pollHandle);
+        settle();
+      }
+    }, 100);
+
     setTimeout(() => {
-      if (!window.$typst) {
+      clearInterval(pollHandle);
+      if (!resolved) {
+        resolved = true;
         reject(
           new Error(
             `Timed out waiting for ${BUNDLE_URL} to set window.$typst after ${BUNDLE_LOAD_TIMEOUT_MS}ms.`
@@ -213,27 +279,20 @@ const ResumePreview = ({
   const [currentThemeColor, setCurrentThemeColor] = useState(themeColor || "#26428b");
   const lastDownloadRef = useRef(download);
 
-  // Build the JSON payload used to build the Typst source.
-  const payload = {
-    profile,
-    education: education.filter((e) => e.selected),
-    experience: experience.filter((e) => e.selected),
-    project: project.filter((p) => p.selected),
-    achievement: achievement.filter((a) => a.selected),
-    skill,
-  };
-
-  // Load the stephen.typ template once
   useEffect(() => {
     let cancelled = false;
-    fetch(TEMPLATE_URL)
-      .then((r) =>
-        r.ok ? r.text() : Promise.reject(new Error(`template not found: ${r.status}`))
-      )
+    console.log("[ResumePreview] Loading template from", TEMPLATE_URL);
+    fetch(`${TEMPLATE_URL}?t=${Date.now()}`, { cache: "no-store" })
+      .then((r) => {
+        console.log("[ResumePreview] Template fetch status", r.status);
+        return r.ok ? r.text() : Promise.reject(new Error(`template not found: ${r.status}`));
+      })
       .then((t) => {
+        console.log("[ResumePreview] Template loaded successfully");
         if (!cancelled) setTemplate(t);
       })
       .catch((e) => {
+        console.error("[ResumePreview] Failed to load template", e);
         if (!cancelled) setTypstError(`Failed to load template: ${e.message}`);
       });
     return () => {
@@ -246,33 +305,20 @@ const ResumePreview = ({
     let cancelled = false;
     let pollHandle: ReturnType<typeof setInterval> | null = null;
 
+    console.log("[ResumePreview] Starting Typst bootstrap");
     ensureTypstBundle()
       .then(() => {
         if (cancelled) return;
+        console.log("[ResumePreview] Typst bundle loaded");
         configureTypstRuntime();
+        console.log("[ResumePreview] Typst runtime configured");
         if (!cancelled) setReady(true);
       })
       .catch((e) => {
+        console.error("[ResumePreview] Typst init failed", e);
         if (cancelled) return;
         setTypstError(e?.message || "Typst init failed");
       });
-
-    // Safety net: if the bundle.js finishes executing but doesn't expose
-    // `window.$typst` (e.g. the listener fired too early), keep polling the
-    // global for a short window so we still get to `ready`.
-    pollHandle = setInterval(() => {
-      if (cancelled) return;
-      if (typeof window !== "undefined" && window.$typst) {
-        if (pollHandle) clearInterval(pollHandle);
-        pollHandle = null;
-        try {
-          configureTypstRuntime();
-          setReady(true);
-        } catch (e: any) {
-          setTypstError(e?.message || "Typst init failed");
-        }
-      }
-    }, 80);
 
     return () => {
       cancelled = true;
@@ -280,14 +326,15 @@ const ResumePreview = ({
     };
   }, []);
 
-  // Re-compile when template or payload changes (debounced 300ms)
+  // Re-compile when template or state changes (debounced 300ms)
   useEffect(() => {
-    if (!ready || !template) {
+    if (!ready) {
       return;
     }
     const t = setTimeout(async () => {
       const start = performance.now();
       try {
+        console.log("[ResumePreview] Starting Typst compilation");
         if (typeof window === "undefined" || !window.$typst) {
           setTypstError("Typst runtime not available");
           return;
@@ -297,38 +344,43 @@ const ResumePreview = ({
           return;
         }
 
+        if (!template) return;
+
         // Build the Typst source by substituting placeholders.
         let source = template;
-        source = source.replace(
-          /\{\{profile\}\}/g,
-          formatProfileForTypst(payload.profile)
-        );
-        source = source.replace(
-          /\{\{education\}\}/g,
-          formatArrayForTypst(payload.education)
-        );
-        source = source.replace(
-          /\{\{experience\}\}/g,
-          formatArrayForTypst(payload.experience)
-        );
-        source = source.replace(
-          /\{\{project\}\}/g,
-          formatArrayForTypst(payload.project)
-        );
-        source = source.replace(
-          /\{\{achievement\}\}/g,
-          formatArrayForTypst(payload.achievement)
-        );
-        source = source.replace(
-          /\{\{skill\}\}/g,
-          formatArrayForTypst(payload.skill)
-        );
+        const filteredEducation = education.filter((e) => e.selected);
+        const filteredExperience = experience.filter((e) => e.selected);
+        const filteredProject = project.filter((p) => p.selected);
+        const filteredAchievement = achievement.filter((a) => a.selected);
+
+        const formattedProfile = formatProfileForTypst(profile);
+        const formattedEducation = formatArrayForTypst(filteredEducation);
+        const formattedExperience = formatArrayForTypst(filteredExperience);
+        const formattedProject = formatArrayForTypst(filteredProject);
+        const formattedAchievement = formatArrayForTypst(filteredAchievement);
+        const formattedSkill = formatArrayForTypst(skill);
+
+        console.log("[ResumePreview] Formatted profile:", formattedProfile);
+        console.log("[ResumePreview] Formatted education:", formattedEducation);
+        console.log("[ResumePreview] Formatted experience:", formattedExperience);
+        console.log("[ResumePreview] Formatted project:", formattedProject);
+        console.log("[ResumePreview] Formatted achievement:", formattedAchievement);
+        console.log("[ResumePreview] Formatted skill:", formattedSkill);
+
+        source = source.replace(/\{\{profile\}\}/g, formattedProfile);
+        source = source.replace(/\{\{education\}\}/g, formattedEducation);
+        source = source.replace(/\{\{experience\}\}/g, formattedExperience);
+        source = source.replace(/\{\{project\}\}/g, formattedProject);
+        source = source.replace(/\{\{achievement\}\}/g, formattedAchievement);
+        source = source.replace(/\{\{skill\}\}/g, formattedSkill);
         // Apply theme color (replaces any prior `accent-color: "..."` literal).
         const tc = currentThemeColor;
         source = source.replace(
           /accent-color:\s*"[^"]*"/,
           `accent-color: "${tc}"`
         );
+
+        console.log("[ResumePreview] Typst source:", source);
 
         // The current TypstSnippet API exposes `vector({mainContent})` which
         // compiles to the intermediate vector (IR) format that TypstDocument
@@ -338,6 +390,7 @@ const ResumePreview = ({
           setTypstError("Compilation returned no result");
           return;
         }
+        console.log("[ResumePreview] Typst compilation succeeded");
         setArtifact(result);
         onRenderTime?.(performance.now() - start);
       } catch (e: any) {
@@ -346,7 +399,18 @@ const ResumePreview = ({
       }
     }, 300);
     return () => clearTimeout(t);
-  }, [ready, template, payload, currentThemeColor, onRenderTime]);
+  }, [
+    ready,
+    template,
+    profile,
+    education,
+    experience,
+    project,
+    achievement,
+    skill,
+    currentThemeColor,
+    onRenderTime,
+  ]);
 
   // Trigger a download whenever the "Get PDF" button bumps the atom.
   useEffect(() => {

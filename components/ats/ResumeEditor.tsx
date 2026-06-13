@@ -28,6 +28,11 @@ import {
   renderTimeData,
   downloadData,
   getEmptyProfile,
+  getEmptyEducation,
+  getEmptyExperience,
+  getEmptyProject,
+  getEmptyAchievement,
+  getEmptySkill,
 } from "@/lib/ats/store";
 import { updateATSResume } from "@/lib/actions/ats-resume.actions";
 
@@ -57,23 +62,70 @@ const ResumeEditor = ({
   const [renderTime, setRenderTime] = useAtom(renderTimeData);
   const [download, setDownload] = useAtom(downloadData);
 
-  // Hydrate once from server-provided initial data
+  // Hydrate from server-provided initial data and reset store state on id change
   const hydrated = useRef(false);
+  const lastIdRef = useRef(atsResumeId);
+
   useEffect(() => {
+    if (lastIdRef.current !== atsResumeId) {
+      hydrated.current = false;
+      lastIdRef.current = atsResumeId;
+    }
+
     if (hydrated.current || !initialData) return;
     hydrated.current = true;
-    // Only hydrate the profile if it has at least one populated field —
-    // a freshly created resume has profile = {} which would clobber the
-    // store defaults (e.g. the `socials` array).
+
+    // Populate profile or reset to default
     if (initialData.profile && Object.keys(initialData.profile).length > 0) {
       setProfile({ ...getEmptyProfile(), ...initialData.profile });
+    } else {
+      setProfile(getEmptyProfile());
     }
-    if (initialData.education?.length) setEducation(initialData.education);
-    if (initialData.experience?.length) setExperience(initialData.experience);
-    if (initialData.project?.length) setProject(initialData.project);
-    if (initialData.achievement?.length) setAchievement(initialData.achievement);
-    if (initialData.skill?.length) setSkill(initialData.skill);
-  }, [initialData, setProfile, setEducation, setExperience, setProject, setAchievement, setSkill]);
+
+    // Populate education or reset to default
+    if (initialData.education?.length) {
+      setEducation(initialData.education);
+    } else {
+      setEducation([getEmptyEducation()]);
+    }
+
+    // Populate experience or reset to default
+    if (initialData.experience?.length) {
+      setExperience(initialData.experience);
+    } else {
+      setExperience([getEmptyExperience()]);
+    }
+
+    // Populate project or reset to default
+    if (initialData.project?.length) {
+      setProject(initialData.project);
+    } else {
+      setProject([getEmptyProject()]);
+    }
+
+    // Populate achievement or reset to default
+    if (initialData.achievement?.length) {
+      setAchievement(initialData.achievement);
+    } else {
+      setAchievement([getEmptyAchievement()]);
+    }
+
+    // Populate skill or reset to default
+    if (initialData.skill?.length) {
+      setSkill(initialData.skill);
+    } else {
+      setSkill([getEmptySkill()]);
+    }
+  }, [
+    atsResumeId,
+    initialData,
+    setProfile,
+    setEducation,
+    setExperience,
+    setProject,
+    setAchievement,
+    setSkill,
+  ]);
 
   // -------- auto-save --------
   const [saveStatus, setSaveStatus] = useState<SaveStatus>("idle");
@@ -199,10 +251,10 @@ const ResumeEditor = ({
         <ResizablePanel defaultSize={50} minSize={30} className="overflow-y-auto bg-slate-50">
           <div className="space-y-4 p-4">
             <ProfileSection />
-            <ExperienceSection />
             <EducationSection />
-            <ProjectSection />
+            <ExperienceSection />
             <SkillSection />
+            <ProjectSection />
             <AchievementSection />
           </div>
         </ResizablePanel>
