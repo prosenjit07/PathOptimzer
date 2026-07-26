@@ -1,7 +1,5 @@
 <div align="center">
-  <br />
-  <img src="./public/img/image.png" alt="PathOptimzer Banner" />
-  <br />
+ 
   <br />
 
   <div>
@@ -25,8 +23,52 @@
 
 ---
 
+## 🖼️ Project Overview
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="./public/img/landing-page.png" alt="Landing Page" width="100%" />
+      <br />
+      <sub><b>Landing Page</b></sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="./public/img/ats-resume.png" alt="ATS Friendly Resume" width="100%" />
+      <br />
+      <sub><b>ATS Friendly Resume</b></sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="./public/img/ai-response.jpeg" alt="AI Response" width="100%" />
+      <br />
+      <sub><b>AI Response</b></sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="./public/img/cv-create-output.jpeg" alt="CV Create Output" width="100%" />
+      <br />
+      <sub><b>CV Create Output</b></sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="./public/img/download-cv.jpeg" alt="Download CV" width="100%" />
+      <br />
+      <sub><b>Download CV</b></sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="./public/img/EMAIL-Automation.png" alt="Email Automation" width="100%" />
+      <br />
+      <sub><b>Email Automation</b></sub>
+    </td>
+  </tr>
+</table>
+
+---
+
 ## 📋 Table of Contents
 
+- [Project Overview](#️-project-overview)
 - [Features](#-features)
 - [Tech Stack](#-tech-stack)
 - [Project Structure](#-project-structure)
