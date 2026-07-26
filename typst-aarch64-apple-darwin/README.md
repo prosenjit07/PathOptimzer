@@ -43,14 +43,36 @@ it is:
  <img alt="Example" width="900" src="https://user-images.githubusercontent.com/17899797/228031796-ced0e452-fcee-4ae9-92da-b9287764ff25.png"/>
 </p>
 
-## Project Screenshots
+## Project Overview
 
+### 🏠 Landing Page
 <p align="center">
-  <img alt="EMAIL Automation" width="900" src="../public/img/EMAIL-Automation.png"/>
+  <img alt="Landing Page" width="900" src="https://raw.githubusercontent.com/prosenjit07/PathOptimzer/main/public/img/landing-page.png"/>
 </p>
 
+### 📧 Email Automation
 <p align="center">
-  <img alt="ATS" width="900" src="../public/img/ats.png"/>
+  <img alt="EMAIL Automation" width="900" src="https://raw.githubusercontent.com/prosenjit07/PathOptimzer/main/public/img/EMAIL-Automation.png"/>
+</p>
+
+### 📄 ATS Resume Analysis
+<p align="center">
+  <img alt="ATS Resume" width="900" src="https://raw.githubusercontent.com/prosenjit07/PathOptimzer/main/public/img/ats-resume.png"/>
+</p>
+
+### 🤖 AI Response
+<p align="center">
+  <img alt="AI Response" width="900" src="https://raw.githubusercontent.com/prosenjit07/PathOptimzer/main/public/img/ai-response.jpeg"/>
+</p>
+
+### 📝 CV Create Output
+<p align="center">
+  <img alt="CV Create Output" width="900" src="https://raw.githubusercontent.com/prosenjit07/PathOptimzer/main/public/img/cv-create-output.jpeg"/>
+</p>
+
+### ⬇️ Download CV
+<p align="center">
+  <img alt="Download CV" width="900" src="https://raw.githubusercontent.com/prosenjit07/PathOptimzer/main/public/img/download-cv.jpeg"/>
 </p>
 
 

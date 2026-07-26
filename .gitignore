@@ -37,3 +37,28 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .env
+
+# secrets & credentials
+*.json
+!package.json
+!package-lock.json
+!tsconfig.json
+!components.json
+!next.config*.json
+
+# typst binary & archive
+typst-aarch64-apple-darwin/
+typst.tar.xz
+
+# test & debug files
+test-*.js
+test-*.html
+public/debug-*.html
+public/test-*.html
+*.pdf
+
+# temporary plan docs
+*-plan.md
+ATS_RESUME_PLAN.md
+email_automation_plan.md
+performance-improment-plan.md
